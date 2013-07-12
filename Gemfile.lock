@@ -62,6 +62,7 @@ GEM
     virtus (0.5.5)
       backports (~> 3.3)
       descendants_tracker (~> 0.0.1)
+    virtus-rspec (0.0.1)
     wasabi (3.1.0)
       httpi (~> 2.0)
       nokogiri (>= 1.4.0)
@@ -74,4 +75,5 @@ DEPENDENCIES
   rspec
   savon_spec
   simplecov
+  virtus-rspec
   workday!
