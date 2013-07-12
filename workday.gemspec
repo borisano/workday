@@ -16,6 +16,8 @@ Gem::Specification.new do |gem|
 
   gem.test_files = %w[]
 
-  gem.add_dependency 'savon', '~>2.2.0'
+  gem.add_dependency 'savon', '~> 2.2.0'
+  gem.add_dependency 'virtus', '~> 0.5.5'
+
   gem.add_development_dependency 'savon_spec'
 end
