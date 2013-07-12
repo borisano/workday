@@ -1,3 +1,5 @@
+require 'savon'
+
 module Workday
   class Client
     def initialize user_name, password
