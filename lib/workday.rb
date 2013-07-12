@@ -1,4 +1,4 @@
-require 'savon'
+require 'virtus'
 
 module Workday
   autoload :Client, 'workday/client'

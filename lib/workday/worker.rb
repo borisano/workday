@@ -1,5 +1,10 @@
 module Workday
   class Worker
-    attr_accessor :employee_id, :first_name, :last_name, :hire_date
+    include Virtus
+
+    attribute :employee_id, String
+    attribute :first_name, String
+    attribute :last_name, String
+    attribute :hire_date, Date
   end
 end

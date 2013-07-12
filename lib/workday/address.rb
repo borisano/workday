@@ -1,5 +1,12 @@
 module Workday
   class Address
-    attr_accessor :type, :address_lines, :city, :state, :postal_code, :country
+    include Virtus
+
+    attribute :type, String
+    attribute :lines, Array[String]
+    attribute :city, String
+    attribute :state, String
+    attribute :postal_code, String
+    attribute :country, String
   end
 end
