@@ -1,0 +1,19 @@
+# SimpleCov reports
+coverage
+
+# Rspec configuration
+.rspec
+tmp/
+
+# MergeTool backup files
+*.orig
+
+# Misc. OS files
+.DS_Store
+
+*.gem
+
+# IDEA files
+.idea/
+*.iml
+*.ipr
