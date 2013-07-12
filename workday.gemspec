@@ -21,4 +21,6 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'savon_spec'
   gem.add_development_dependency 'virtus-rspec'
+  gem.add_development_dependency 'excon'
+  gem.add_development_dependency 'webmock'
 end
