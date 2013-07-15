@@ -11,5 +11,13 @@ module Workday
     attribute :addresses, Hash[Symbol => Address]
     attribute :phones, Hash[Symbol => Phone]
     attribute :emails, Hash[Symbol => Email]
+
+    def self.new_from_worker_data worker_data
+      Worker.new(
+        employee_id: worker_data[:worker_id],
+        first_name: worker_data[:personal_data][:name_data][:legal_name_data][:name_detail_data][:first_name],
+        last_name: worker_data[:personal_data][:name_data][:legal_name_data][:name_detail_data][:last_name],
+        hire_date: worker_data[:employment_data][:worker_status_data][:hire_date] )
+    end
   end
 end

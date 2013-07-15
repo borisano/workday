@@ -2,6 +2,7 @@ require 'simplecov'
 SimpleCov.start
 
 require 'workday'
+include Workday
 
 require 'savon_spec'
 require 'virtus-rspec'
