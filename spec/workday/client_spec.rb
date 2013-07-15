@@ -13,7 +13,10 @@ describe Workday::Client do
       employee_id: '21001',
       first_name: 'Logan',
       last_name: 'McNeil',
-      hire_date: '2000-01-01-08:00'
+      hire_date: '2000-01-01-08:00',
+      emails: {
+        'HOME' => { type: 'HOME', email: 'clay.christensen@workday.com' },
+        'WORK' => { type: 'WORK', email: 'clay.christensen@workday.com' } }
   ) }
 
   let(:client){ Workday::Client.new('user_name', 'password') }
@@ -40,6 +43,7 @@ describe Workday::Client do
       worker.first_name.should eq expected_worker.first_name
       worker.last_name.should eq expected_worker.last_name
       worker.hire_date.should eq expected_worker.hire_date
+      worker.emails.should eq expected_worker.emails
     end
   end
 end

@@ -19,16 +19,38 @@ module Workday
       if response
         response.body[:get_workers_response][:response_data][:worker].each do |worker|
           worker_data = worker[:worker_data]
-          workers << Worker.new(
+
+          worker = Worker.new(
             employee_id: worker_data[:worker_id],
             first_name: worker_data[:personal_data][:name_data][:legal_name_data][:name_detail_data][:first_name],
             last_name: worker_data[:personal_data][:name_data][:legal_name_data][:name_detail_data][:last_name],
-            hire_date: worker_data[:employment_data][:worker_status_data][:hire_date]
-            )
+            hire_date: worker_data[:employment_data][:worker_status_data][:hire_date] )
+          worker.emails = emails_from_data worker_data
+
+          workers << worker
         end
       end
 
       workers
+    end
+
+    def emails_from_data worker_data
+      emails = {}
+      data = worker_data[:personal_data][:contact_data][:email_address_data]
+
+      # If there is only one email address, data will just be a Hash.
+      # If there is more than one email address, data will be an array of Hashes.
+      if data.is_a? Array
+        data.each do |email_data|
+          type = email_data[:usage_data][:type_data][:type_reference][:id][1]
+          emails[type] = Email.new type: type, email: email_data[:email_address]
+        end
+      else
+        type = data[:usage_data][:type_data][:type_reference][:id][1]
+        emails[type] = Email.new type: type, email: data[:email_address]
+      end
+
+      emails
     end
 
     def initialize_params user_name, password
@@ -52,10 +74,5 @@ module Workday
         attributes: { "bsvc:version" => "v19" }
       }
     end
-
-    def worker_employee_id worker
-      worker[:worker_data][:worker_id]
-    end
-
   end
 end
