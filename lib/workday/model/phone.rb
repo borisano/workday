@@ -13,15 +13,24 @@ module Workday
       # or an Array of Phone_Data elements
       if response.is_a? Array
         response.each do |phone_data|
-          type = phone_data[:usage_data][:type_data][:type_reference][:id][1]
-          phones[type] = Phone.new type: type, number: phone_data[:"@wd:formatted_phone"]
+          phone = get_phone_from_data phone_data
+          phones[phone.type] = phone
         end
       else
-        type = response[:usage_data][:type_data][:type_reference][:id][1]
-        phones[type] = Phone.new type: type, number: response[:"@wd:formatted_phone"]
+        phone = get_phone_from_data response
+        phones[phone.type] = phone
       end
 
       phones
+    end
+
+    private
+
+    def self.get_phone_from_data phone_data
+      Phone.new(
+        type: phone_data[:usage_data][:type_data][:type_reference][:id][1],
+        number: phone_data[:"@wd:formatted_phone"]
+      )
     end
   end
 end

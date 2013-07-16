@@ -13,15 +13,24 @@ module Workday
       # or an Array of Email_Address_Data elements
       if response.is_a? Array
         response.each do |email_data|
-          type = email_data[:usage_data][:type_data][:type_reference][:id][1]
-          emails[type] = Email.new type: type, email: email_data[:email_address]
+          email = get_email_from_data email_data
+          emails[email.type] = email
         end
       else
-        type = response[:usage_data][:type_data][:type_reference][:id][1]
-        emails[type] = Email.new type: type, email: response[:email_address]
+        email = get_email_from_data response
+        emails[email.type] = email
       end
 
       emails
+    end
+
+    private
+
+    def self.get_email_from_data email_data
+      Email.new(
+        type: email_data[:usage_data][:type_data][:type_reference][:id][1],
+        email: email_data[:email_address]
+      )
     end
   end
 end
