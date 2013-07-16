@@ -4,5 +4,24 @@ module Workday
 
     attribute :type, String
     attribute :number, String
+
+    # Returns a Hash of Phone objects parsed from the given Workday response
+    def self.new_from_phone_data response
+      phones = {}
+
+      # The Workday response will have either a single Phone_Data element
+      # or an Array of Phone_Data elements
+      if response.is_a? Array
+        response.each do |phone_data|
+          type = phone_data[:usage_data][:type_data][:type_reference][:id][1]
+          phones[type] = Phone.new type: type, number: phone_data[:"@wd:formatted_phone"]
+        end
+      else
+        type = response[:usage_data][:type_data][:type_reference][:id][1]
+        phones[type] = Phone.new type: type, number: response[:"@wd:formatted_phone"]
+      end
+
+      phones
+    end
   end
 end
