@@ -10,15 +10,8 @@ module Workday
     def self.new_from_email_address_data response
       emails = {}
 
-      # The Workday response will have either a single Email_Address_Data element
-      # or an Array of Email_Address_Data elements
-      if response.is_a? Array
-        response.each do |email_data|
-          email = get_email_from_data email_data
-          emails[email.type] = email
-        end
-      else
-        email = get_email_from_data response
+      Workday.response_to_array(response).each do |email_data|
+        email = get_email_from_data email_data
         emails[email.type] = email
       end
 

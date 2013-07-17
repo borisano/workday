@@ -14,15 +14,8 @@ module Workday
     def self.new_from_address_data response
       addresses = {}
 
-      # The Workday response will have either a single Address_Data element
-      # or an Array of Address_Data elements
-      if response.is_a? Array
-        response.each do |address_data|
-          address = get_address_from_data address_data
-          addresses[address.type] = address
-        end
-      else
-        address = get_address_from_data response
+      Workday.response_to_array(response).each do |address_data|
+        address = get_address_from_data address_data
         addresses[address.type] = address
       end
 

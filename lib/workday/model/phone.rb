@@ -10,15 +10,8 @@ module Workday
     def self.new_from_phone_data response
       phones = {}
 
-      # The Workday response will have either a single Phone_Data element
-      # or an Array of Phone_Data elements
-      if response.is_a? Array
-        response.each do |phone_data|
-          phone = get_phone_from_data phone_data
-          phones[phone.type] = phone
-        end
-      else
-        phone = get_phone_from_data response
+      Workday.response_to_array(response).each do |phone_data|
+        phone = get_phone_from_data phone_data
         phones[phone.type] = phone
       end
 
