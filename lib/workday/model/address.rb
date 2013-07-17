@@ -35,7 +35,7 @@ module Workday
         type: address_data[:usage_data][:type_data][:type_reference][:id][1],
         lines: address_data[:address_line_data].is_a?(Array) ? address_data[:address_line_data] : [address_data[:address_line_data]],
         city: address_data[:municipality],
-        state: address_data[:country_region_reference][:id][1][/\w+-(\w+)/,1],
+        state: address_data[:country_region_reference] ? address_data[:country_region_reference][:id][1][/\w+-(\w+)/,1] : nil,
         postal_code: address_data[:postal_code],
         country: address_data[:country_reference][:id][2]
       )

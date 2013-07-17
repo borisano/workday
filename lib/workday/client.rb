@@ -11,27 +11,23 @@ module Workday
       workers_from_response response
     end
 
-    private
-
     def workers_from_response response
       workers = []
 
       if response
         response.body[:get_workers_response][:response_data][:worker].each do |worker|
-          worker_data = worker[:worker_data]
-
-          worker = Worker.new_from_worker_data worker_data
-          worker.emails = Email.new_from_email_address_data worker_data[:personal_data][:contact_data][:email_address_data]
-
-          workers << worker
+          begin
+            workers << Worker.new_from_worker_data(worker[:worker_data])
+          rescue StandardError => e
+            Logger.error "Unable to process worker record:  #{e}\n#{worker}"
+          end
         end
       end
 
       workers
     end
 
-    def addresses_from_data worker_data
-    end
+    private
 
     def initialize_params user_name, password
       {

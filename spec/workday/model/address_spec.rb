@@ -121,16 +121,60 @@ describe Workday::Address do
     context "when response has a single address number" do
       it "returns a Hash with the address number" do
         expected_addresses = { 'HOME' => address_home }
-        addresss = Workday::Address.new_from_address_data address_data_one_address
-        addresss.should eq expected_addresses
+        address = Workday::Address.new_from_address_data address_data_one_address
+        address.should eq expected_addresses
       end
     end
 
     context "when response has multiple address numbers" do
       it "returns a Hash with the address numbers" do
         expected_addresses = { 'HOME' => address_home, 'WORK' => address_work }
-        addresss = Workday::Address.new_from_address_data address_data_multiple_addresses
-        addresss.should eq expected_addresses
+        address = Workday::Address.new_from_address_data address_data_multiple_addresses
+        address.should eq expected_addresses
+      end
+    end
+
+    context "when address doesn't have a state" do
+
+      let(:no_state_address){
+        {
+          :country_reference => {
+            :id => [
+              "80938777cac5440fab50d729f9634969",
+              "SG",
+              "SGP",
+              "702"],
+            :"@wd:descriptor" => "Singapore" },
+          :address_line_data => "Temasek Boulevard",
+          :municipality => "Singapore",
+          :postal_code => "038985",
+          :usage_data => {
+            :type_data => {
+              :type_reference => {
+                :id => ["1f27f250dfaa4724ab1e1617174281e4", "WORK"],
+                :"@wd:descriptor" => "Work" },
+              :"@wd:primary" => "0" },
+            :"@wd:public" => "1" },
+          :address_reference => {
+            :id => ["bb335048b5dd4047b9329d99160a4ee8", "ADDRESS_REFERENCE-4-650"],
+            :"@wd:descriptor" => "ADDRESS_REFERENCE-4-650" },
+          :"@wd:effective_date" => "2000-01-01-08:00",
+          :"@wd:address_format_type" => "Basic",
+          :"@wd:formatted_address" => "1 Fort Road&amp;#xa;Unit 75&amp;#xa;Singapore 427665&amp;#xa;Singapore",
+          :"@wd:defaulted_business_site_address" => "0"
+        }
+      }
+
+      it "leaves state blank" do
+        expected = { 'WORK' => Workday::Address.new(
+          type: 'WORK',
+          lines: ['Temasek Boulevard'],
+          city: 'Singapore',
+          state: nil,
+          postal_code: '038985',
+          country: 'SGP' ) }
+        address = Workday::Address.new_from_address_data no_state_address
+        address.should eq expected
       end
     end
   end

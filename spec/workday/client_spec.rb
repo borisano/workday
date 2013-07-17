@@ -8,20 +8,6 @@ describe Workday::Client do
   let(:headers){ {'Content-Type' => 'application/xml'} }
   let(:test_worker_response){ File.read('spec/fixtures/get_workers_response.xml') }
 
-  let(:expected_worker){
-    Workday::Worker.new(
-      employee_id: '21001',
-      first_name: 'Logan',
-      last_name: 'McNeil',
-      hire_date: '2000-01-01-08:00',
-      emails: {
-        'HOME' => email_home,
-        'WORK' => email_work },
-      addresses: {
-        'HOME' => { type: 'HOME', email: 'clay.christensen@workday.com' },
-        'WORK' => { type: 'WORK', email: 'clay.christensen@workday.com' } },
-  ) }
-
   let(:client){ Workday::Client.new('user_name', 'password') }
   subject{client}
 
@@ -34,19 +20,33 @@ describe Workday::Client do
 
   it{ should respond_to :get_workers }
   describe "#get_workers" do
-    it "can retrieve a worker" do
+    it "parses sample XML return successfully" do
       stub_request(:post, url).to_return(body: test_worker_response, headers: headers)
       workers = subject.get_workers
-  #     workers.size.should eq 100
+      workers.size.should eq 100
+    end
+  end
 
-  #     # When Virtus releases a fix for ValueObjects with Hashes, these can go
-  #     # away and be replaced with a simple "should eq" test
-  #     worker = workers.first
-  #     worker.employee_id.should eq expected_worker.employee_id
-  #     worker.first_name.should eq expected_worker.first_name
-  #     worker.last_name.should eq expected_worker.last_name
-  #     worker.hire_date.should eq expected_worker.hire_date
-  #     worker.emails.should eq expected_worker.emails
+  it{ should respond_to :workers_from_response }
+  describe "#workers_from_response" do
+    it "parses the response into workers" do
+      stub_request(:post, url).to_return(body: test_worker_response, headers: headers)
+      workers = subject.get_workers
+      workers.size.should eq 100
+    end
+
+    it "handles errors" do
+
+    end
+  end
+
+  describe 'errors' do
+    it "handles errors" do
+      Logger.expects(:error).at_least_once
+      Worker.expects(:new_from_worker_data).raises(StandardError, 'Testing Errors').at_least_once
+      stub_request(:post, url).to_return(body: test_worker_response, headers: headers)
+      workers = subject.get_workers
+      workers.should_not be_nil
     end
   end
 
