@@ -9,6 +9,7 @@ describe Workday::Address do
   describe ".new_from_address_data" do
     let(:address_home){ Workday::Address.new(
       type: 'HOME',
+      description: 'Home',
       lines: ['42 Laurel Street'],
       city: 'San Francisco',
       state: 'CA',
@@ -17,6 +18,7 @@ describe Workday::Address do
 
     let(:address_work){ Workday::Address.new(
       type: 'WORK',
+      description: 'Work',
       lines: ['3939 The Embarcadero'],
       city: 'San Francisco',
       state: 'CA',
@@ -168,6 +170,7 @@ describe Workday::Address do
       it "leaves state blank" do
         expected = { 'WORK' => Workday::Address.new(
           type: 'WORK',
+          description: 'Work',
           lines: ['Temasek Boulevard'],
           city: 'Singapore',
           state: nil,

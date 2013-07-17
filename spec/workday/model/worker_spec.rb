@@ -161,16 +161,17 @@ describe Workday::Worker do
       }
     }
 
-    let(:email_home){ Workday::Email.new type: 'HOME', email: 'clay.christensen@workday.com' }
-    let(:email_work){ Workday::Email.new type: 'WORK', email: 'clay.christensen@workday.com' }
+    let(:email_home){ Workday::Email.new type: 'HOME', description: 'Home', email: 'clay.christensen@workday.com' }
+    let(:email_work){ Workday::Email.new type: 'WORK', description: 'Work', email: 'clay.christensen@workday.com' }
     let(:expected_emails){ { :HOME => email_home, :WORK => email_work } }
 
-    let(:phone_home){ Workday::Phone.new type: 'HOME', number: '+1 (415) 441-7842' }
-    let(:phone_work){ Workday::Phone.new type: 'WORK', number: '+1 (415) 789-8904' }
+    let(:phone_home){ Workday::Phone.new type: 'HOME', description: 'Home', number: '+1 (415) 441-7842' }
+    let(:phone_work){ Workday::Phone.new type: 'WORK', description: 'Work', number: '+1 (415) 789-8904' }
     let(:expected_phones){ { :HOME => phone_home, :WORK => phone_work } }
 
     let(:address_home){ Workday::Address.new(
       type: 'HOME',
+      description: 'Home',
       lines: ['42 Laurel Street'],
       city: 'San Francisco',
       state: 'CA',
@@ -178,6 +179,7 @@ describe Workday::Worker do
       country: 'USA' ) }
     let(:address_work){ Workday::Address.new(
       type: 'WORK',
+      description: 'Work',
       lines: ['3939 The Embarcadero'],
       city: 'San Francisco',
       state: 'CA',

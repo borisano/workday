@@ -3,6 +3,7 @@ module Workday
     include Virtus::ValueObject
 
     attribute :type, String
+    attribute :description, String
     attribute :lines, Array[String]
     attribute :city, String
     attribute :state, String
@@ -33,6 +34,7 @@ module Workday
     def self.get_address_from_data address_data
       Address.new(
         type: address_data[:usage_data][:type_data][:type_reference][:id][1],
+        description: address_data[:usage_data][:type_data][:type_reference][:"@wd:descriptor"],
         lines: address_data[:address_line_data].is_a?(Array) ? address_data[:address_line_data] : [address_data[:address_line_data]],
         city: address_data[:municipality],
         state: address_data[:country_region_reference] ? address_data[:country_region_reference][:id][1][/\w+-(\w+)/,1] : nil,

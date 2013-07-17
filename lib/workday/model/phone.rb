@@ -3,6 +3,7 @@ module Workday
     include Virtus::ValueObject
 
     attribute :type, String
+    attribute :description, String
     attribute :number, String
 
     # Returns a Hash of Phone objects parsed from the given Workday response
@@ -29,6 +30,7 @@ module Workday
     def self.get_phone_from_data phone_data
       Phone.new(
         type: phone_data[:usage_data][:type_data][:type_reference][:id][1],
+        description: phone_data[:usage_data][:type_data][:type_reference][:"@wd:descriptor"],
         number: phone_data[:"@wd:formatted_phone"]
       )
     end

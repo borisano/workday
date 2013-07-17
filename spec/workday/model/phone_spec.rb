@@ -7,8 +7,8 @@ describe Workday::Phone do
   end
 
   describe ".new_from_phone_data" do
-    let(:phone_home){ Workday::Phone.new type: 'HOME', number: '+1 (415) 441-7842' }
-    let(:phone_work){ Workday::Phone.new type: 'WORK', number: '+1 (415) 789-8904' }
+    let(:phone_home){ Workday::Phone.new type: 'HOME', description: 'Home', number: '+1 (415) 441-7842' }
+    let(:phone_work){ Workday::Phone.new type: 'WORK', description: 'Work', number: '+1 (415) 789-8904' }
 
     let(:phone_data_one_phone_number){
       {

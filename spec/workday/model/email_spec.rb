@@ -7,8 +7,8 @@ describe Workday::Email do
   end
 
   describe ".new_from_email_address_data" do
-    let(:email_home){ Workday::Email.new type: 'HOME', email: 'clay.christensen@workday.com' }
-    let(:email_work){ Workday::Email.new type: 'WORK', email: 'clay.christensen@workday.com' }
+    let(:email_home){ Workday::Email.new type: 'HOME', description: 'Home', email: 'clay.christensen@workday.com' }
+    let(:email_work){ Workday::Email.new type: 'WORK', description: 'Work', email: 'clay.christensen@workday.com' }
 
     let(:email_address_data_one_email){
       {

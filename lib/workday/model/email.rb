@@ -3,6 +3,7 @@ module Workday
     include Virtus::ValueObject
 
     attribute :type, String
+    attribute :description, String
     attribute :email, String
 
     # Returns a Hash of Email objects parsed from the given Workday response
@@ -29,6 +30,7 @@ module Workday
     def self.get_email_from_data email_data
       Email.new(
         type: email_data[:usage_data][:type_data][:type_reference][:id][1],
+        description: email_data[:usage_data][:type_data][:type_reference][:"@wd:descriptor"],
         email: email_data[:email_address]
       )
     end
