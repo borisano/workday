@@ -12,6 +12,7 @@ GEM
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
+    awesome_print (1.1.0)
     backports (3.3.3)
     builder (3.2.2)
     columnize (0.3.6)
@@ -79,6 +80,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   debugger
   excon
   rspec
