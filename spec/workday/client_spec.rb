@@ -19,6 +19,16 @@ describe Workday::Client do
     it "assigns a client" do
       subject.instance_variable_get(:@client).should be
     end
+
+    it "assigns a logger" do
+      subject.instance_variable_get(:@logger).should be
+    end
+
+    it "assigns a given logger" do
+      logger = ::Logger.new STDERR
+      client = Workday::Client.new 'user_name', 'password', logger: logger
+      client.instance_variable_get(:@logger).should eq logger
+    end
   end
 
   it{ should respond_to :get_workers }
@@ -44,15 +54,11 @@ describe Workday::Client do
       workers = subject.get_workers
       workers.size.should eq 100
     end
-
-    it "handles errors" do
-
-    end
   end
 
   describe 'errors' do
     it "handles errors" do
-      Logger.expects(:error).at_least_once
+      Logger.any_instance.expects(:error).at_least_once
       Worker.expects(:new_from_worker_data).raises(StandardError, 'Testing Errors').at_least_once
       stub_request(:post, url).to_return(body: single_response_100, headers: headers)
       workers = subject.get_workers

@@ -3,7 +3,7 @@ require 'savon'
 
 module Workday
   class Client
-    def initialize user_name, password
+    def initialize user_name, password, options = {}
       @client = Savon.client( initialize_params user_name, password )
 
       if ENV['WORKDAY_DEBUG'] || !options[:logger]
@@ -71,7 +71,7 @@ module Workday
     end
 
     def get_workers_call params = {}
-      logger.debug "Workday:  Sending Get_Workers request.  Params = #{params}"
+      @logger.debug "Workday:  Sending Get_Workers request.  Params = #{params}"
       @client.call :get_workers, get_workers_params(params)
     end
   end
