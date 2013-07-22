@@ -33,7 +33,7 @@ describe Workday::Client do
 
   it{ should respond_to :get_workers }
   describe "#get_workers" do
-    it "parses sample XML return successfully" do
+    it "parses response into workers" do
       stub_request(:post, url).to_return(body: single_response_100, headers: headers)
       workers = subject.get_workers
       workers.size.should eq 100
@@ -44,15 +44,6 @@ describe Workday::Client do
       stub_request(:post, url).with(body: /Page>2/).to_return(body: paged_response_2, headers: headers)
       workers = subject.get_workers
       workers.size.should eq 3
-    end
-  end
-
-  it{ should respond_to :workers_from_response }
-  describe "#workers_from_response" do
-    it "parses the response into workers" do
-      stub_request(:post, url).to_return(body: single_response_100, headers: headers)
-      workers = subject.get_workers
-      workers.size.should eq 100
     end
   end
 
