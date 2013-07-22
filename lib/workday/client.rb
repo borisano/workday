@@ -4,13 +4,19 @@ require 'savon'
 module Workday
   class Client
     def initialize user_name, password, options = {}
-      @client = Savon.client( initialize_params user_name, password )
-
-      if ENV['WORKDAY_DEBUG'] || !options[:logger]
+      logger = options.delete :logger
+      if ENV['WORKDAY_DEBUG'] || !logger
         @logger = ::Logger.new(STDERR)
       else
-        @logger = options[:logger]
+        @logger = logger
       end
+
+      options[:wsdl] = File.expand_path('lib/workday/assets/human_resources_v19.wsdl') if !options[:wsdl]
+      options[:wsse_auth] = [user_name, password]
+
+      options[:log_level] = :error if !options[:log_level]
+      options[:pretty_print_xml] = true if !options[:pretty_print_xml]
+      @client = Savon.client( options )
     end
 
     def get_workers params = {}
@@ -51,17 +57,6 @@ module Workday
       end
 
       workers
-    end
-
-    def initialize_params user_name, password
-      {
-        wsdl: File.expand_path('lib/workday/assets/human_resources_v19.wsdl'),
-        wsse_auth: [user_name, password],
-        namespaces: {'xmlns:bsvc' => 'urn:com.workday/bsvc'},
-        namespace_identifier: :bsvc,
-        log_level: :error,
-        pretty_print_xml: true
-      }
     end
 
     def get_workers_call params = {}
