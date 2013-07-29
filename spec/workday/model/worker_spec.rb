@@ -206,17 +206,17 @@ describe Workday::Worker do
 
     describe 'calls other model factories' do
       it "calls the Email factory" do
-        Email.expects(:new_from_email_address_data)
+        Email.should_receive(:new_from_email_address_data)
         Workday::Worker.new_from_worker_data worker_data
       end
 
       it "calls the Address factory" do
-        Address.expects(:new_from_address_data)
+        Address.should_receive(:new_from_address_data)
         Workday::Worker.new_from_worker_data worker_data
       end
 
       it "calls the Phone factory" do
-        Phone.expects(:new_from_phone_data)
+        Phone.should_receive(:new_from_phone_data)
         Workday::Worker.new_from_worker_data worker_data
       end
     end
