@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    workday (0.9.5)
+    workday (0.9.6)
       savon (~> 2.2.0)
       virtus (~> 0.5.5)
 
@@ -31,10 +31,7 @@ GEM
       builder (>= 2.1.2)
     httpi (2.0.2)
       rack
-    metaclass (0.0.1)
     mini_portile (0.5.1)
-    mocha (0.14.0)
-      metaclass (~> 0.0.1)
     multi_json (1.7.7)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
@@ -57,10 +54,6 @@ GEM
       nokogiri (>= 1.4.0)
       nori (~> 2.1.0)
       wasabi (~> 3.1.0)
-    savon_spec (0.1.6)
-      mocha (>= 0.9.8)
-      rspec (>= 2.0.0)
-      savon (>= 0.8.0)
     simplecov (0.7.1)
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
@@ -84,7 +77,6 @@ DEPENDENCIES
   debugger
   excon
   rspec
-  savon_spec
   simplecov
   virtus-rspec
   webmock

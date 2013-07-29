@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'savon', '~> 2.2.0'
   gem.add_dependency 'virtus', '~> 0.5.5'
 
-  gem.add_development_dependency 'savon_spec'
+  gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'virtus-rspec'
   gem.add_development_dependency 'excon'
 end
