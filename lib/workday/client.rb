@@ -25,6 +25,35 @@ module Workday
       workers
     end
 
+    def process_response response
+      if response &&
+         response.body &&
+         response.body[:get_workers_response] &&
+         response.body[:get_workers_response][:response_data]
+        return ResponseHelper.element_to_array response.body[:get_workers_response][:response_data][:worker]
+      end
+      []
+    end
+
+    def process_worker_list worker_list
+      workers = []
+
+      worker_list.each do |worker|
+        worker = process_worker_data worker[:worker_data]
+        workers << worker if worker
+      end
+
+      workers
+    end
+
+    def process_worker_data worker_data
+      begin
+        Worker.new_from_worker_data worker_data
+      rescue StandardError => e
+        @logger.error "Unable to process worker record:  #{e}\n#{worker_data}"
+      end
+    end
+
     private
 
     def do_get_workers params = {}
@@ -36,17 +65,14 @@ module Workday
 
       response = get_workers_call params
       if response
-        worker_list = Workday.response_to_array response.body[:get_workers_response][:response_data][:worker]
+        worker_list = ResponseHelper.element_to_array response.body[:get_workers_response][:response_data][:worker]
         page = response.body[:get_workers_response][:response_results][:page]
         total_pages = response.body[:get_workers_response][:response_results][:total_pages]
 
         @logger.debug("Workday:  Processing page #{page} of #{total_pages} total pages.")
         worker_list.each do |worker|
-          begin
-            workers << Worker.new_from_worker_data(worker[:worker_data])
-          rescue StandardError => e
-            @logger.error "Unable to process worker record:  #{e}\n#{worker}"
-          end
+          worker = process_worker_data worker[:worker_data]
+          workers << worker if worker
         end
 
         # Recurse if more pages in the results

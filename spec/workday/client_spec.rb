@@ -47,13 +47,64 @@ describe Workday::Client do
     end
   end
 
-  describe 'errors' do
-    it "handles errors" do
-      Logger.any_instance.expects(:error).at_least_once
-      Worker.expects(:new_from_worker_data).raises(StandardError, 'Testing Errors').at_least_once
-      stub_request(:post, url).to_return(body: single_response_100, headers: headers)
-      workers = subject.get_workers
-      workers.should_not be_nil
+  describe "#process_response" do
+    context "when given an invalid responses" do
+      it "returns empty array when response is nil" do
+        client.process_response(nil).should eq []
+      end
+
+      it "returns empty array when body is nil" do
+        client.process_response(double("Response", :body => nil )).should eq []
+      end
+
+      it "returns empty array when get_workers_response is nil" do
+        client.process_response(double("Response", :body => { :get_workers_response => nil } )).should eq []
+      end
+
+      it "returns empty array when response_data is nil" do
+        client.process_response(double("Response", :body => { :get_workers_response => { :response_data => nil } } )).should eq []
+      end
+
+      it "returns empty array when workers is nil" do
+        client.process_response(double("Response", :body => { :get_workers_response => { :response_data => { :workers => nil } } } )).should eq []
+      end
+    end
+
+    context "when given a valid response" do
+      let(:workers){ ['first', 'second', 'third'] }
+      let(:response){ double("Response", :body => { :get_workers_response => { :response_data => { :workers => workers } } }) }
+
+      it "ensures result is an Array" do
+        ResponseHelper.should_receive(:element_to_array).once
+        client.process_response response
+      end
+
+      it "returns an array of elements" do
+        client.process_response(response) =~ workers
+      end
+    end
+
+  end
+
+  describe "#process_worker_list" do
+    it "calls process_worker_data for each worker" do
+      workers = [{worker_data: 'first'}, {worker_data: 'second'}, {worker_data: 'third'}]
+      client = Workday::Client.new('user_name', 'password')
+      client.should_receive(:process_worker_data).exactly(3).times.and_return(Worker.new)
+      client.process_worker_list workers
+    end
+  end
+
+  describe "#process_worker_data" do
+    it "calls Worker factory" do
+      Worker.should_receive(:new_from_worker_data)
+      subject.process_worker_data "some response"
+    end
+
+    it "logs error for failure" do
+      Logger.any_instance.should_receive(:error).once
+      Worker.should_receive(:new_from_worker_data).and_raise(StandardError, 'Testing Errors')
+      subject.process_worker_data "some response"
     end
   end
 
