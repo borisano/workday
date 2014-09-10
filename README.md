@@ -8,4 +8,4 @@ This gem is a proof-of-concept prototype and is subject to change.
 
 ## License
 
-(MIT)[http://opensource.org/licenses/MIT]
+[MIT](http://opensource.org/licenses/MIT)
